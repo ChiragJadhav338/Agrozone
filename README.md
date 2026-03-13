@@ -32,6 +32,7 @@ Organized project structure
 Scalable backend architecture
 
 🧰 Tech Stack
+
 Frontend
 
 HTML5
@@ -39,6 +40,7 @@ HTML5
 CSS3
 
 JavaScript
+
 
 Backend
 
@@ -55,3 +57,7 @@ GitHub – Code hosting
 VS Code – Development environment
 
 npm – Package management
+
+🎯 Purpose of the Project
+
+This project was built to practice full-stack web development and understand backend API architecture while solving real-world agricultural marketplace problems.
