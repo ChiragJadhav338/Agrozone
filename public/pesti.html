@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesticides - AgroZone</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(to right, #e0f7fa, #e7f4fe);
+        }
+
+        /* Navigation Bar Styles */
+      .nav-back-btn {
+    color: #004d00; 
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 8px 14px;
+   
+}
+
+.nav-back-btn i {
+    margin-right: 6px;
+}
+
+        .back-button {
+            margin-left: auto;
+        }
+
+        /* Pesticides Section */
+        .pesticides-section {
+            padding: 40px 20px;
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 1200px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            text-align: center;
+        }
+
+        .pesticides-section h3 {
+            margin-bottom: 30px;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        #crop-select {
+            max-width: 300px;
+            margin: 0 auto 20px auto;
+        }
+
+        .pesticide-card {
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .pesticide-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-img-top {
+    height: 300px; /* increased height */
+    object-fit: contain; /* ensures full image is visible without cropping */
+    border-radius: 10px 10px 0 0;
+    background-color: #f4f4f4; /* optional: shows a nice background if image is smaller */
+}
+
+        .card-title {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .btn-custom {
+            background-color: #2e7d32;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background-color: #1b5e20;
+            color: #fff;
+        }
+
+    </style>
+</head>
+
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar d-flex align-items-center">
+    <a href="getstarted.html" class="nav-back-btn">
+        <i class="fas fa-arrow-left"></i> 
+    </a>
+</nav>
+
+
+    <!-- Pesticides Section -->
+    <div class="container pesticides-section">
+        <h3>Select Crop to See Recommended Pesticides</h3>
+        <select id="crop-select" class="form-control mb-3">
+            <option value="">-- Select Crop --</option>
+            <option value="Wheat">Wheat</option>
+            <option value="Rice">Rice</option>
+            <option value="Corn">Corn</option>
+            <option value="Soybean">Soybean</option>
+            <option value="Cotton">Cotton</option>
+        </select>
+
+        <button onclick="goBack()" class="btn btn-custom mb-4">
+            <i class="fas fa-arrow-left"></i> Back to Previous Selection
+        </button>
+
+        <div id="pesticide-info" class="row"></div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        const pesticidesData = {
+            Wheat: [
+                { name: "Glyphosate", measurement: "2 liters per acre", effects: "Effective against a broad spectrum of weeds.", img: "images/11.png" },
+                { name: "Chlorpyrifos", measurement: "1.5 liters per acre", effects: "Controls aphids, beetles, and other pests.", img: "images/12.png" }
+            ],
+            Rice: [
+                { name: "Azoxystrobin", measurement: "3 liters per acre", effects: "Controls fungal diseases like blight.", img: "images/13.png" },
+                { name: "Imidacloprid", measurement: "0.5 liters per acre", effects: "Effective against sucking insects.", img: "images/14.png" }
+            ],
+            Corn: [
+                { name: "Metolachlor", measurement: "1 liter per acre", effects: "Controls annual grasses and broadleaf weeds.", img: "images/15.jpg" },
+                { name: "Pyrethroids", measurement: "1.2 liters per acre", effects: "Rapid knockdown effect on insect pests.", img: "images/16.png" }
+            ],
+            Soybean: [
+                { name: "Bacillus thuringiensis", measurement: "0.75 liters per acre", effects: "Targets caterpillars without harming beneficial insects.", img: "images/13.png" },
+                { name: "Copper Fungicides", measurement: "1.5 liters per acre", effects: "Effective against various fungal diseases.", img: "images/14.png" }
+            ],
+            Cotton: [
+                { name: "Imidacloprid", measurement: "1 liter per acre", effects: "Low toxicity to beneficial insects.", img: "images/14.png" },
+                { name: "Glyphosate", measurement: "1.5 liters per acre", effects: "Effective against a broad spectrum of weeds.", img: "images/11.png" }
+            ]
+        };
+
+        document.getElementById('crop-select').addEventListener('change', function () {
+            const selectedCrop = this.value;
+            const pesticideInfoDiv = document.getElementById('pesticide-info');
+            pesticideInfoDiv.innerHTML = '';
+
+            if (pesticidesData[selectedCrop]) {
+                pesticidesData[selectedCrop].forEach(pesticide => {
+                    const pesticideCard = document.createElement('div');
+                    pesticideCard.classList.add('col-md-6', 'col-lg-4', 'pesticide-card');
+                    pesticideCard.innerHTML = `
+                        <div class="card h-100">
+                            <img src="${pesticide.img}" class="card-img-top" alt="${pesticide.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${pesticide.name}</h5>
+                                <p class="card-text">
+                                    <strong>Measurement:</strong> ${pesticide.measurement}<br>
+                                    <strong>Effects:</strong> ${pesticide.effects}
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                    pesticideInfoDiv.appendChild(pesticideCard);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

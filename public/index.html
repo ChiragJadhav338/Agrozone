@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to AgroZone</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start; /* move form to left */
+            align-items: center; /* vertical center */
+            min-height: 100vh;
+            background: url('/images/image2.jpg') no-repeat center center/cover;
+            font-family: 'Poppins', sans-serif;
+            color: rgb(0, 139, 23); /* green text */
+            padding-left: 150px; /* distance from left edge */
+        }
+
+        .welcome-screen {
+            background: rgba(255, 255, 255, 0.95); /* white background */
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 1.8s ease-in-out;
+            box-shadow: 0 0 30px rgba(0, 139, 23, 0.2);
+            color: rgb(0, 139, 23); /* green text */
+        }
+
+        .welcome-screen h1 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .welcome-screen p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            padding: 12px 25px;
+            background-color: rgb(0, 139, 23); /* green button */
+            color: white; /* text white */
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+            min-width: 120px;
+        }
+
+        .cta-button:hover {
+            background-color: #00ff2a6c;
+            transform: scale(1.05);
+        }
+
+        .logo {
+            width: 200px;
+            height: auto;
+            margin-bottom: 25px;
+            animation: popUp 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popUp {
+            0% {
+                transform: scale(0);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding-left: 30px;
+            }
+
+            .welcome-screen h1 {
+                font-size: 2.2em;
+            }
+
+            .welcome-screen p {
+                font-size: 1em;
+            }
+
+            .logo {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-left: 15px;
+            }
+
+            .welcome-screen {
+                padding: 30px 20px;
+            }
+
+            .cta-button {
+                padding: 10px 20px;
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="welcome-screen">
+        <img src="/images/Logo3.png" alt="AgroZone Logo" class="logo">
+
+        <h1>Welcome to AgroZone</h1>
+        <p>Your gateway to smart farming tools and crop insights.</p>
+
+        <!-- Buttons -->
+        <!-- <a class="cta-button" href="getstarted.html">Get Started</a> -->
+        <a class="cta-button" href="login.html">Login</a>
+    </div>
+
+</body>
+
+</html>

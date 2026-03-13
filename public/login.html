@@ -1,0 +1,114 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AgroZone</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('/images/image2.jpg') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.522);
+            width: 350px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #cccccc39;
+            border-radius: 8px;
+        }
+        .login-btn {
+            width: 330px;
+            padding: 12px;
+            margin-top: 15px;
+            background: #000000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .login-btn:hover {
+            background: #ffffff;
+            color:black
+        }
+        .links {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .links a {
+            color: #000000;
+            text-decoration: none;
+        }
+        #fullname{
+            width: 305px;
+        }
+        #password{
+            width: 305px;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<div class="login-container">
+    <h2>Login</h2>
+
+    <form id="loginForm">
+        <input id="fullname" type="text" placeholder="Full Name" required>
+        <input id="password" type="password" placeholder="Password" required>
+
+        <button class="login-btn" type="submit">Login</button>
+
+        <div class="links">
+            <a href="#">Forgot Password?</a><br>
+            <a href="register.html">Create New Account</a>
+        </div>
+    </form>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const data = {
+        fullname: fullname.value,
+        password: password.value
+    };
+
+    const res = await fetch("/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    const result = (await res.text()).trim(); // FIXED 👈
+
+    if (result === "Login Successful") {
+        window.location.href = "getstarted.html"; // REDIRECT WORKS NOW ✔
+    } else {
+        alert(result);
+    }
+});
+</script>
+
+</body>
+</html>

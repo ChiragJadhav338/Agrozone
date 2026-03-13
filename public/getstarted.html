@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroZone - Smart Farming Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: url('/images/land.jpg') no-repeat center center/cover;
+            color: rgb(255, 255, 255);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: linear-gradient(90deg, #1b5e20, #43a047);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+            gap: 6px; /* ✅ AgroZone आणि tagline मधली space */
+        }
+
+        .logo .title {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo .tagline {
+            font-size: 8px;
+            font-weight: 500;
+            color: #c8e6c9;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        nav ul li a:hover {
+            color: #e0f2f1;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            background: url('/images/head.jpg') no-repeat center center/cover;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 25px;
+        }
+
+        .hero .btn {
+            padding: 12px 30px;
+            margin: 5px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #43a047;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #66bb6a;
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #43a047;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0f2f1;
+        }
+
+        /* Weather Card */
+        .weather-section {
+            background: rgba(0, 0, 0, 0.5);
+            margin: 50px auto;
+            padding: 25px;
+            max-width: 600px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .weather-section input,
+        .weather-section button {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+
+        .weather-section input {
+            width: 60%;
+        }
+
+        .weather-section button {
+            background-color: #43a047;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .weather-section button:hover {
+            background-color: #66bb6a;
+        }
+
+        .hourly-item {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        #weather-icon {
+            margin-top: 15px;
+        }
+
+        /* About Section */
+        .about {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin: 50px auto;
+            max-width: 1200px;
+            padding: 0 20px;
+        }
+
+        .about .text,
+        .about .video {
+            flex: 1 1 500px;
+        }
+
+        .about h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .about p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .about {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .weather-section input {
+                width: 100%;
+            }
+        }
+         #weather-icon {
+            display: none;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">
+            <span class="title">AgroZone</span>
+            <span class="tagline">Connecting Farmers to Digital Market</span>
+        </div>
+        <ul>
+            <li><a href="news.html">News</a></li>
+
+            <li><a href="tools.html">Farm Tools</a></li>
+            <li><a href="crops.html">Crops</a></li>
+            <li><a href="pesti.html">Pesticides</a></li>
+            <li><a href="marketrate.html">Market Rate</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="contact us.html">Contact Us</a></li>
+        </ul>
+    </nav>
+       
+
+
+    <!-- Weather -->
+    <section class="weather-section">
+        <h2>Live Weather Report</h2>
+        <input type="text" id="city" placeholder="Enter city name">
+        <button onclick="getWeather()">Get Weather</button>
+        <div id="temp-div"></div>
+        <div id="weather-info"></div>
+        <img id="weather-icon" alt="Weather Icon">
+        <div id="hourly-forecast"></div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="text">
+            <h2>About AgroZone</h2>
+            <p>AgroZone is dedicated to empowering farmers with tools and knowledge to thrive in modern agriculture. Our platform provides a range of smart farming tools, crop information, and insights into best practices for sustainable farming. We aim to bridge the gap between traditional and modern methods, helping farmers improve productivity, yields, and sustainability. Whether you’re seasoned or starting, AgroZone is your trusted companion.</p>
+        </div>
+        <div class="video">
+            <iframe width="100%" height="315" src="https://www.youtube.com/embed/x1X2QInOoYw?si=K7d62ANu_dgdkJAi"
+                title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </section>
+
+ 
+    <script>
+        // Fetch and display weather data
+        function getWeather() {
+            const apiKey = '464502f7177467860fe496b94f25ff61'; // Your OpenWeatherMap API key
+            const city = document.getElementById('city').value;
+
+            if (!city) {
+                alert('Please enter a city');
+                return;
+            }
+
+            const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+            const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+
+            fetch(currentWeatherUrl)
+                .then(response => response.json())
+                .then(data => {
+                    displayWeather(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching current weather data:', error);
+                    alert('Error fetching current weather data. Please try again.');
+                });
+
+            fetch(forecastUrl)
+                .then(response => response.json())
+                .then(data => {
+                    displayHourlyForecast(data.list);
+                })
+                .catch(error => {
+                    console.error('Error fetching hourly forecast data:', error);
+                    alert('Error fetching hourly forecast data. Please try again.');
+                });
+        }
+
+        // Display current weather data
+        function displayWeather(data) {
+            const tempDivInfo = document.getElementById('temp-div');
+            const weatherInfoDiv = document.getElementById('weather-info');
+            const weatherIcon = document.getElementById('weather-icon');
+            const hourlyForecastDiv = document.getElementById('hourly-forecast');
+
+            // Clear previous content
+            weatherInfoDiv.innerHTML = '';
+            hourlyForecastDiv.innerHTML = '';
+            tempDivInfo.innerHTML = '';
+
+            if (data.cod === '404') {
+                weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
+            } else {
+                const cityName = data.name;
+                const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
+                const description = data.weather[0].description;
+                const iconCode = data.weather[0].icon;
+                const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+
+                const temperatureHTML = `<p>${temperature}°C</p>`;
+                const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
+
+                tempDivInfo.innerHTML = temperatureHTML;
+                weatherInfoDiv.innerHTML = weatherHtml;
+                weatherIcon.src = iconUrl;
+                weatherIcon.alt = description;
+
+                showImage();
+            }
+        }
+
+        // Display hourly forecast data
+        function displayHourlyForecast(hourlyData) {
+            const hourlyForecastDiv = document.getElementById('hourly-forecast');
+
+            const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
+
+            next24Hours.forEach(item => {
+                const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
+                const hour = dateTime.getHours();
+                const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
+                const iconCode = item.weather[0].icon;
+                const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+
+                const hourlyItemHtml = `
+                    <div class="hourly-item">
+                        <span>${hour}:00</span>
+                        <img src="${iconUrl}" alt="Hourly Weather Icon">
+                        <span>${temperature}°C</span>
+                    </div>
+                `;
+
+                hourlyForecastDiv.innerHTML += hourlyItemHtml;
+            });
+        }
+
+        // Show weather icon after it's loaded
+        function showImage() {
+            const weatherIcon = document.getElementById('weather-icon');
+            weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
+        }
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+

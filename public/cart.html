@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgroZone - Cart</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:#f4f4f4}
+
+.top-bar{
+    position:relative;
+    background:#2e7d32;
+    color:white;
+    padding:15px;
+    text-align:center;
+    font-size:1.3rem;
+    font-weight:600;
+}
+.back-btn{
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    color:white;
+    font-size:1.1rem;
+    cursor:pointer;
+}
+
+main{padding:30px;max-width:1200px;margin:auto}
+.cart-layout{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+
+.cart-box,.summary-box{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #ddd}
+th{background:#e8f5e9;color:#2e7d32}
+
+.qty-input{width:60px}
+.remove-btn{background:none;border:none;color:red;cursor:pointer}
+
+.form-group{margin-bottom:12px}
+.form-group input,.form-group textarea{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.cod-box{
+    background:#f1f8e9;
+    padding:12px;
+    border-radius:8px;
+    margin:15px 0;
+}
+
+.btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+.btn-green{background:#43a047;color:white}
+.btn-outline{background:none;border:1px solid #43a047;color:#43a047;margin-top:10px}
+</style>
+</head>
+
+<body>
+
+<div class="top-bar">
+   <a href="tools.html"><button class="back-btn" >←</button></a> 
+    Cart
+</div>
+
+<main>
+<div class="cart-layout">
+
+    <!-- LEFT -->
+    <div class="cart-box">
+        <h2>Your Cart</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="cartBody"></tbody>
+        </table>
+        <button class="btn btn-outline" onclick="clearCart()">Clear Cart</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="summary-box">
+        <h3>Customer Details</h3>
+
+        <div class="form-group">
+            <input type="text" id="fullname" placeholder="Full Name">
+        </div>
+        <div class="form-group">
+            <input type="text" id="contact" placeholder="Contact Number">
+        </div>
+        <div class="form-group">
+            <textarea id="address" rows="3" placeholder="Delivery Address"></textarea>
+        </div>
+
+        <hr style="margin:15px 0">
+
+        <h3>Payment</h3>
+        <p>Total Items: <strong id="itemCount">0</strong></p>
+        <p>Total Amount: ₹ <strong id="totalAmount">0</strong></p>
+
+        <div class="cod-box">
+            <strong>Cash on Delivery</strong>
+        </div>
+
+        <button class="btn btn-green" onclick="placeOrder()">Place Order (COD)</button>
+    </div>
+
+</div>
+
+</main>
+
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function renderCart(){
+    const cartBody = document.getElementById("cartBody");
+    cartBody.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item,index)=>{
+        const subtotal = item.price * item.quantity;
+        total += subtotal;
+
+        cartBody.innerHTML += `
+            <tr>
+                <td>${index+1}</td>
+                <td>${item.productName}</td>
+                <td>₹${item.price}</td>
+                <td>
+                    <input type="number" class="qty-input" min="1"
+                    value="${item.quantity}"
+                    onchange="updateQty(${index},this.value)">
+                </td>
+                <td>₹${subtotal}</td>
+                <td><button class="remove-btn" onclick="removeItem(${index})">✖</button></td>
+            </tr>
+        `;
+    });
+
+    document.getElementById("totalAmount").textContent = total;
+    document.getElementById("itemCount").textContent = cart.length;
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function updateQty(i,q){ cart[i].quantity = Math.max(1,parseInt(q)); renderCart(); }
+function removeItem(i){ cart.splice(i,1); renderCart(); }
+function clearCart(){ cart=[]; localStorage.removeItem("cart"); renderCart(); }
+function goBack(){ window.location.href="products.html"; }
+
+function placeOrder(){
+    if(cart.length === 0){
+        alert("Your cart is empty");
+        return;
+    }
+
+    fetch("/buy-now", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            fullname: fullname.value,
+            contact: contact.value,
+            address: address.value,
+            cart,
+            totalPrice: cart.reduce((s,i)=>s+i.price*i.quantity,0),
+            paymentMode: "COD"
+        })
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Order not saved");
+        }
+        return res.json();
+    })
+    .then(() => {
+        alert("✅ Order placed successfully! (Cash on Delivery)");
+        localStorage.removeItem("cart");
+        window.location.replace("tools.html");
+    })
+    .catch(() => {
+        alert("❌ Order failed. Please try again.");
+    });
+}
+
+
+/* ✅ THIS WAS THE MISSING LINE */
+renderCart();
+</script>
+
+</body>
+</html>

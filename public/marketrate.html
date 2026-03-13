@@ -1,0 +1,293 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crop Market Rates - AgroZone</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#eef6f0;
+    color:#1f3d2b;
+}
+
+/* HERO */
+.hero{
+    background:linear-gradient(135deg,#1f7a3a,#38d26a);
+    color:white;
+    padding:50px 20px;
+    text-align:center;
+    position:relative;
+}
+
+.back-button{
+    position:absolute;
+    top:25px;
+    left:25px;
+    color:white;
+    font-size:26px;
+    text-decoration:none;
+}
+
+/* CONTAINER */
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+/* CARD */
+.card{
+    background:white;
+    border-radius:18px;
+    padding:30px;
+    box-shadow:0 15px 30px rgba(0,0,0,0.08);
+    margin-bottom:40px;
+}
+
+/* FORM */
+.form-group{
+    margin-bottom:18px;
+}
+
+label{
+    font-weight:500;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+
+button{
+    background:#1f7a3a;
+    color:white;
+    padding:10px 22px;
+    border:none;
+    border-radius:10px;
+    font-size:15px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#155c2b;
+}
+
+/* TABLE */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th{
+    background:#1f7a3a;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+}
+
+tr:hover td{
+    background:#f2fbf5;
+}
+
+.section-title{
+    font-size:1.5rem;
+    margin-bottom:15px;
+    font-weight:600;
+}
+
+@media(max-width:768px){
+    .hero h1{
+        font-size:1.8rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<div class="hero">
+    <a href="getstarted.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+    <h1>Live Crop Market Rates</h1>
+    <p>Track, compare & share crop prices easily</p>
+</div>
+
+<div class="container">
+
+<!-- ADD RATE -->
+<div class="card">
+<h3 class="section-title">Add Your Crop Rate</h3>
+
+<form id="rateForm" onsubmit="saveRate(event)">
+    <div class="form-group">
+        <label>Select Crop</label>
+        <select id="cropSelect">
+            <option value="">Select crop</option>
+            <option>Wheat</option>
+            <option>Rice</option>
+            <option>Soybean</option>
+             <option>Bajra</option>
+             <option>Cotton</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Price (₹ per Quintal)</label>
+        <input type="number" id="cropPrice" required>
+    </div>
+
+    <div class="form-group">
+        <label>Location</label>
+        <input type="text" id="cropLocation" required>
+    </div>
+
+    <button type="submit"><i class="fas fa-plus"></i> Add Rate</button>
+</form>
+</div>
+
+<!-- USER RATES -->
+<div class="card">
+<h3 class="section-title">Your Rates</h3>
+<table>
+<thead>
+<tr>
+    <th>Crop</th>
+    <th>Price</th>
+    <th>Location</th>
+</tr>
+</thead>
+<tbody id="userRates"></tbody>
+</table>
+</div>
+
+<!-- ONLINE RATES -->
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center;">
+    <h3 class="section-title">🌐 Current Online Rates</h3>
+    <button onclick="loadOnlineRates()">
+        <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+</div>
+
+<table>
+<thead>
+<tr>
+    <th>Crop</th>
+    <th>Price</th>
+    <th>Market</th>
+</tr>
+</thead>
+<tbody id="onlineRates"></tbody>
+</table>
+</div>
+
+</div>
+
+<script>
+const onlineData = [
+    {crop:"Wheat",price:2100,market:"Delhi"},
+    {crop:"Rice",price:1580,market:"Punjab"},
+    {crop:"Soybean",price:5700,market:"Maharashtra"},
+     { crop: "Bajra", price: 1850, market: "Rajasthan" },
+    { crop: "Cotton", price: 6200, market: "Gujarat" }
+];
+async function saveRate(event){
+    event.preventDefault();
+
+    const crop = cropSelect.value;
+    const price = cropPrice.value;
+    const location = cropLocation.value;
+
+    if(!crop){
+        alert("Please select crop");
+        return;
+    }
+
+    try {
+        const res = await fetch("/save-rate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ crop, price, location })
+        });
+
+        const msg = await res.text();
+        alert(msg);
+
+        // Add to table after saving
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${crop}</td>
+            <td>₹${price}</td>
+            <td>${location}</td>
+        `;
+        userRates.appendChild(row);
+
+        rateForm.reset();
+
+    } catch (err) {
+        console.error(err);
+        alert("Failed to save rate");
+    }
+}
+
+
+// LOAD ONLINE RATES
+function loadOnlineRates(){
+    const selectedCrop = cropSelect.value;
+    const onlineRates = document.getElementById("onlineRates");
+
+    onlineRates.innerHTML = "";
+
+    const filtered = selectedCrop
+        ? onlineData.filter(item => item.crop === selectedCrop)
+        : onlineData;
+
+    filtered.forEach(item=>{
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${item.crop}</td>
+            <td>₹${item.price}</td>
+            <td>${item.market}</td>
+        `;
+        onlineRates.appendChild(row);
+    });
+
+    const timeRow = document.createElement("tr");
+    timeRow.innerHTML = `
+        <td colspan="3" style="text-align:center;color:#777;font-size:13px;">
+            Last updated: ${new Date().toLocaleString()}
+        </td>
+    `;
+    onlineRates.appendChild(timeRow);
+}
+
+// AUTO LOAD
+window.onload = loadOnlineRates;
+
+// FILTER ON CROP CHANGE
+cropSelect.addEventListener("change", loadOnlineRates);
+</script>
+
+</body>
+</html>
